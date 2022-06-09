@@ -62,7 +62,7 @@ return res.status(201).send({user:user});
 
 // get all the addressess of a particular user
 
-router.get(':id/address',async(req,res)=>{
+router.get('/:id/address',async(req,res)=>{
 
     try {
          const user = await User.findById(req.params.id);
@@ -75,5 +75,26 @@ router.get(':id/address',async(req,res)=>{
         return res.status(500).send({error:error.message});
     }
 });
+
+// creating the address of a user
+
+router.patch(':id/address/create', async(req,res)=>{
+
+    try {
+        const update_Address= await User.updateOne(
+            {id:req.params.id},{$push:{address:req.body}}
+        );
+
+        if(update_Address.acknowledge===true){
+
+            const user= await User.findById(req.params.id).lean().exec();
+            return res.status(201).send({data:user.address});
+        }
+
+        return res.status(404).send("something went wrong");
+    } catch (error) {
+        return res.status(500).send({error:error.message});
+    }
+})
 
 
