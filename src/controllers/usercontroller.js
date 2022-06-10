@@ -60,6 +60,21 @@ return res.status(201).send({user:user});
     }
 });
 
+
+// deleting a user through the id
+
+router.delete(":/id/delete",async(req,res)=>{
+    try {
+        
+        const user= await User.findByIdAndDelete({id:req.params.id}).lean().exec();
+
+        return res.status(200).send({user:user});
+    } catch (error) {
+        
+        return res.status(500).send({error:error.message});
+    }
+})
+
 // get all the addressess of a particular user
 
 router.get('/:id/address',async(req,res)=>{
@@ -78,14 +93,14 @@ router.get('/:id/address',async(req,res)=>{
 
 // creating the address of a user
 
-router.patch(':id/address/create', async(req,res)=>{
+router.patch('/:id/address/create', async(req,res)=>{
 
     try {
         const update_Address= await User.updateOne(
             {id:req.params.id},{$push:{address:req.body}}
         );
 
-        if(update_Address.acknowledge===true){
+        if(update_Address.acknowledged===true){
 
             const user= await User.findById(req.params.id).lean().exec();
             return res.status(201).send({data:user.address});
@@ -97,4 +112,26 @@ router.patch(':id/address/create', async(req,res)=>{
     }
 })
 
+// deleting a address of the user by user id.
+
+router.delete('/:id/addressess/:idx/edit',async(req,res)=>{
+
+    try {
+        const delete_address = await User.findByIdAndDelete({id:req.params.id},{"Address._id":req.params.idx}).lean().exec();
+
+        if(delete_address.acknowledged===true) {
+             const user= await User.findById(req.params.id).lean().exec();
+
+             return res.status(201).send({data:user.address,message:"success"})
+        }
+
+        return res.status(404).send({error:"something went wrong"});
+
+        
+    } catch (error) {
+        res.status(500).send({error:error.message});
+    }
+})
+
+module.exports=router;
 
