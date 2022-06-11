@@ -1,8 +1,8 @@
 
 const connect = require('./configs/db');
-const app = express();
+const app = require('./index');
 
-app.listen(5000, async (req, res) => {
+app.listen(5000, async function() {
     try {
         await connect();
     } catch (error) {
