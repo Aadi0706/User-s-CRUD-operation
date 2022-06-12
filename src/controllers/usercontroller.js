@@ -28,113 +28,114 @@ router.get('/',async(req,res)=>{
 router.post('/create',async(req,res)=>{
     try {
         const user= await User.create(req.body);
-      return res.status(201).send({user:user});
+      
+        return res.status(201).send({user:user});
 
     } catch (error) {
         return res.status(500).send({error:error.message});
     }
 });
 
-// // getting a user through the id.
+// getting a user through the id.
 
-// router.get('/:id',async(req,res)=>{
+router.get('/:id',async(req,res)=>{
 
-//     try {
-//         const user= await User.findById(req.params.id).lean().exec();
-// return res.status(200).send({user:user});
+    try {
+        const user= await User.findById(req.params.id).lean().exec();
+return res.status(200).send({user:user});
 
-//     } catch (error) {
+    } catch (error) {
         
-//         return res.status(500).send({error:error.message});
-//     }
-// })
+        return res.status(500).send({error:error.message});
+    }
+})
 
-// // updating a user through the id of user
+// updating a user through the id of user
 
-// router.patch('/:id/edit',async(req,res)=>{
+router.patch('/:id/edit',async(req,res)=>{
 
-//     try {
-//         const user= await User.findByIdAndUpdate({id:req.params.id}, req.body,{new:true}).lean().exec();
-// return res.status(201).send({user:user});
+    try {
+        const user= await User.findByIdAndUpdate({id:req.params.id}, req.body,{new:true}).lean().exec();
+return res.status(201).send({user:user});
 
-//     } catch (error) {
-//         return res.status(500).send({error:error.message});
+    } catch (error) {
+        return res.status(500).send({error:error.message});
 
-//     }
-// });
+    }
+});
 
 
-// // deleting a user through the id
+// deleting a user through the id
 
-// router.delete(":/id/delete",async(req,res)=>{
-//     try {
+router.delete(":/id/delete",async(req,res)=>{
+    try {
         
-//         const user= await User.findByIdAndDelete({id:req.params.id}).lean().exec();
+        const user= await User.findByIdAndDelete({id:req.params.id}).lean().exec();
 
-//         return res.status(200).send({user:user});
-//     } catch (error) {
+        return res.status(200).send({user:user});
+    } catch (error) {
         
-//         return res.status(500).send({error:error.message});
-//     }
-// })
+        return res.status(500).send({error:error.message});
+    }
+})
 
-// // get all the addressess of a particular user
+// get all the addressess of a particular user
 
-// router.get('/:id/address',async(req,res)=>{
+router.get('/:id/address',async(req,res)=>{
 
-//     try {
-//          const user = await User.findById(req.params.id);
-//          const address= user.Address;
+    try {
+         const user = await User.findById(req.params.id);
+         const address= user.Address;
 
-//          return res.status(200).send({data:address});
+         return res.status(200).send({data:address});
 
-//     } catch (error) {
+    } catch (error) {
         
-//         return res.status(500).send({error:error.message});
-//     }
-// });
+        return res.status(500).send({error:error.message});
+    }
+});
 
-// // creating the address of a user
+// creating the address of a user
 
-// router.patch('/:id/address/create', async(req,res)=>{
+router.patch('/:id/address/create', async(req,res)=>{
 
-//     try {
-//         const update_Address= await User.updateOne(
-//             {id:req.params.id},{$push:{address:req.body}}
-//         );
+    try {
+        const update_Address= await User.updateOne(
+            {id:req.params.id},{$push:{address:req.body}}
+        );
 
-//         if(update_Address.acknowledged===true){
+        if(update_Address.acknowledged===true){
 
-//             const user= await User.findById(req.params.id).lean().exec();
-//             return res.status(201).send({data:user.address});
-//         }
+            const user= await User.findById(req.params.id).lean().exec();
+            return res.status(201).send({data:user.address});
+        }
 
-//         return res.status(404).send("something went wrong");
-//     } catch (error) {
-//         return res.status(500).send({error:error.message});
-//     }
-// })
+        return res.status(404).send("something went wrong");
+    } catch (error) {
+        return res.status(500).send({error:error.message});
+    }
+})
 
-// // deleting a address of the user by user id.
+// deleting a address of the user by user id.
 
-// router.delete('/:id/addressess/:idx/edit',async(req,res)=>{
+router.delete('/:id/addressess/:idx/edit',async(req,res)=>{
 
-//     try {
-//         const delete_address = await User.findByIdAndDelete({id:req.params.id},{"Address._id":req.params.idx}).lean().exec();
+    try {
+        const delete_address = await User.findByIdAndDelete({id:req.params.id},{"Address._id":req.params.idx}).lean().exec();
 
-//         if(delete_address.acknowledged===true) {
-//              const user= await User.findById(req.params.id).lean().exec();
+        if(delete_address.acknowledged===true) {
+             const user= await User.findById(req.params.id).lean().exec();
 
-//              return res.status(201).send({data:user.address,message:"success"})
-//         }
+             return res.status(201).send({data:user.address,message:"success"})
+        }
 
-//         return res.status(404).send({error:"something went wrong"});
+        return res.status(404).send({error:"something went wrong"});
 
         
-//     } catch (error) {
-//         res.status(500).send({error:error.message});
-//     }
-// })
+    } catch (error) {
+        res.status(500).send({error:error.message});
+    }
+})
 
 module.exports=router;
 
